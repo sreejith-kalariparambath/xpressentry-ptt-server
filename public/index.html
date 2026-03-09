@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>XPressEntry PTT SFU Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; background: #0b1120; color: #e5e7eb; }
+        h1 { margin-bottom: 0.25rem; }
+        .card { background: #020617; border-radius: 0.75rem; padding: 1rem 1.25rem; max-width: 640px; box-shadow: 0 20px 40px rgba(15,23,42,0.65); border: 1px solid #1f2937; }
+        label { display: block; margin-top: 0.5rem; font-size: 0.9rem; color: #9ca3af; }
+        input { width: 100%; padding: 0.4rem 0.6rem; border-radius: 0.4rem; border: 1px solid #374151; background: #020617; color: #e5e7eb; }
+        button { margin-top: 0.75rem; padding: 0.4rem 0.9rem; border-radius: 999px; border: none; background: #16a34a; color: white; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+        button.secondary { background: #1f2937; }
+        button[disabled] { opacity: 0.4; cursor: not-allowed; }
+        .row { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+        .row button { flex: 1; }
+        .log { margin-top: 1rem; padding: 0.75rem; border-radius: 0.5rem; background: #020617; border: 1px solid #111827; max-height: 220px; overflow: auto; font-size: 0.8rem; }
+        .pill { display: inline-flex; align-items: center; padding: 0.15rem 0.6rem; border-radius: 999px; background: #111827; font-size: 0.75rem; color: #9ca3af; margin-left: 0.25rem; }
+        audio { margin-top: 0.75rem; width: 100%; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>XPressEntry PTT</h1>
+        <div style="font-size:0.85rem;color:#9ca3af;margin-bottom:0.5rem;">Push-to-talk demo on mediasoup SFU</div>
+
+        <label>Channel ID</label>
+        <input id="channelId" value="demo" />
+
+        <button id="joinBtn">Join Channel</button>
+
+        <div class="row">
+            <button id="pttDownBtn" disabled>Talk (push)</button>
+            <button id="pttUpBtn" class="secondary" disabled>Release</button>
+        </div>
+
+        <audio id="remoteAudio" autoplay playsinline></audio>
+
+        <div class="log" id="log"></div>
+    </div>
+
+    <script src="https://unpkg.com/mediasoup-client@3/lib/index.js"></script>
+    <script src="client.js"></script>
+</body>
+</html>

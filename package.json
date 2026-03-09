@@ -1,0 +1,18 @@
+{
+  "name": "xpressentry-ptt-server",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mediasoup": "^3.19.17",
+    "uuid": "^13.0.0",
+    "ws": "^8.19.0"
+  }
+}
