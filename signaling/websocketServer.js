@@ -130,7 +130,7 @@ function startWebSocketServer(server) {
                                 iceParameters: transport.iceParameters,
                                 iceCandidates: transport.iceCandidates,
                                 dtlsParameters: transport.dtlsParameters,
-                                direction: direction 
+                                direction: direction
                             }
                         }));
 
@@ -170,8 +170,7 @@ function startWebSocketServer(server) {
 
                         console.log("produce called", payload);
 
-                        const channel =
-                            channelManager.getChannel(ws.channelId);
+                        const channel = channelManager.getChannel(ws.channelId);
                         if (!channel) return;
 
                         const peer = channelManager.getPeer(ws.channelId, ws.clientId);
@@ -187,6 +186,14 @@ function startWebSocketServer(server) {
 
                         peer.producers.set(producer.id, producer);
 
+                        producer.on("transportclose", () => {
+                            peer.producers.delete(producer.id);
+                        });
+
+                        producer.on("close", () => {
+                            peer.producers.delete(producer.id);
+                        });
+
                         ws.send(JSON.stringify({
                             type: "produced",
                             payload: { id: producer.id }
@@ -198,7 +205,8 @@ function startWebSocketServer(server) {
                                 producerId: producer.id,
                                 peerId: ws.clientId
                             },
-                            ws.clientId);
+                            ws.clientId
+                        );
 
                         break;
                     }
