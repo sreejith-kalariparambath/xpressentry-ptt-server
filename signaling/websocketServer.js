@@ -134,6 +134,8 @@ function startWebSocketServer(server) {
                             }
                         }));
 
+                        console.log("Transport created:", transport.id, "Direction:", direction);
+
                         break;
                     }
 
@@ -173,6 +175,11 @@ function startWebSocketServer(server) {
                         const channel = channelManager.getChannel(ws.channelId);
                         if (!channel) return;
 
+                        if (channel.speaker !== ws.clientId) {
+                            console.log("Peer tried to produce without speaker lock");
+                            return;
+                        }
+
                         const peer = channelManager.getPeer(ws.channelId, ws.clientId);
                         if (!peer) return;
 
@@ -183,6 +190,9 @@ function startWebSocketServer(server) {
                             kind: payload.kind,
                             rtpParameters: payload.rtpParameters
                         });
+
+                        const stats = await producer.getStats();
+                        console.log("Producer stats:", stats);
 
                         peer.producers.set(producer.id, producer);
 
@@ -230,6 +240,10 @@ function startWebSocketServer(server) {
 
                         const producer = producerPeer.producers.get(producerId);
 
+                        console.log("Consumer created:", consumer.id);
+                        console.log("Producer:", producer.id);
+                        console.log("For peer:", ws.clientId);
+
                         if (!channel.router.canConsume({
                             producerId: producer.id,
                             rtpCapabilities
@@ -260,6 +274,24 @@ function startWebSocketServer(server) {
                             }
                         }));
 
+
+                        break;
+                    }
+
+                    case "resume_consumer": {
+
+                        const channel = channelManager.getChannel(ws.channelId);
+                        if (!channel) return;
+
+                        const peer = channelManager.getPeer(ws.channelId, ws.clientId);
+                        if (!peer) return;
+
+                        const consumer = peer.consumers.get(payload.consumerId);
+                        if (!consumer) return;
+
+                        await consumer.resume();
+
+                        console.log("Consumer resumed:", payload.consumerId);
 
                         break;
                     }
